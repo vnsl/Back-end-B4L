@@ -36,3 +36,14 @@ create table if not exists produto (
   	foreign key (restaurante_id) references restaurante (id) 
 );
 
+insert into categoria (nome) values ('Diversos');
+insert into categoria (nome) values ('Lanches');
+insert into categoria (nome) values ('Carnes');
+insert into categoria (nome) values ('Massas');
+insert into categoria (nome) values ('Pizzas');
+insert into categoria (nome) values ('Japonesa');
+insert into categoria (nome) values ('Chinesa');
+insert into categoria (nome) values ('Mexicano');
+insert into categoria (nome) values ('Brasileira');
+insert into categoria (nome) values ('Italiana');
+insert into categoria (nome) values ('Árabe');
