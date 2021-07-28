@@ -4,7 +4,7 @@
   "description": "![](https://i.imgur.com/xG74tOh.png)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon ./src/index.js"
   },
   "repository": {
     "type": "git",
@@ -16,5 +16,17 @@
   "bugs": {
     "url": "https://github.com/vnsl/Back-end-B4L/issues"
   },
-  "homepage": "https://github.com/vnsl/Back-end-B4L#readme"
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  },
+  "homepage": "https://github.com/vnsl/Back-end-B4L#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.95.8",
+    "pg": "^8.7.0",
+    "yup": "^0.32.9"
+  }
 }
