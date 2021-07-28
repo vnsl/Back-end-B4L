@@ -43,17 +43,17 @@ const cadastrarUsuario = async (req, res) => {
     }
 
     try {
-        const quantidadeUsuarios = await knex('usuario').where({ email });
+        const quantidadeUsuarios = await knex('usuario').where({ email }).first();
 
-        if (quantidadeUsuarios > 0) {
+        if (quantidadeUsuarios) {
             return res.status(400).json("O email já existe");
         }
 
         const senhaCriptografada = await bcrypt.hash(senha, 10);
 
-        const categoria = await knex('categoria').where('id', idCategoria);
+        const categoria = await knex('categoria').where('id', idCategoria).first();
 
-        if (!categoria[0]) {
+        if (!categoria) {
             return res.status(404).json("A categoria informada não existe.");
         }
 
