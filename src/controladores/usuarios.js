@@ -1,7 +1,4 @@
 const knex = require('../conexao');
-
-// rever exercícios do knex
-
 const bcrypt = require('bcrypt');
 
 const cadastrarUsuario = async (req, res) => {
@@ -29,9 +26,6 @@ const cadastrarUsuario = async (req, res) => {
         return res.status(404).json("Favor informar o nome do restaurante.");
     }
 
-    // testar sem esse campo e verificar se armazena null quando o usuário não passar descrição
-    // const descricaoValida = descricao ? descricao : "";
-
     if(!idCategoria) {
         return res.status(404).json("Favor informar o id relativo à Categoria do restaurante.");
     }
@@ -49,29 +43,34 @@ const cadastrarUsuario = async (req, res) => {
     }
 
     try {
-        const queryConsultaEmail = 'select * from usuario where email = $1';
-        const { rowCount: usuarios } = await conexao.query(queryConsultaEmail, [email]);
+        const quantidadeUsuarios = await knex('usuario').where({ email });
 
-        if (usuarios > 0) {
-            return res.status(400).json("Este email já foi cadastrado.");
+        if (quantidadeUsuarios > 0) {
+            return res.status(400).json("O email já existe");
         }
 
         const senhaCriptografada = await bcrypt.hash(senha, 10);
 
-        // persistência dos dados do usuário no banco de dados
-        const queryUsuario = 'insert into usuario (nome, email, senha) values ($1, $2, $3)';
-        const { rowCount: novoUsuario} = await conexao.query(queryUsuario, [nome, email, senhaCriptografada]);
+        const categoria = await knex('categoria').where('id', idCategoria);
 
-        // persistência dos dados do restaurante no banco de dados
-        const queryRestaurante = 'insert into restaurante (nome, descricao, categoria_id, taxa_entrega, tempo_entrega_minutos, valor_minimo_pedido) values ($1, $2, $3, $4, $5, $6)';
-        const { rowCount: novoRestaurante} = await conexao.query(queryRestaurante, [nomeRestaurante, idCategoria, taxaEntrega, tempoEntregaEmMinutos, valorMinimoPedido]);
-
-        if (novoUsuario === 0) {
-            return res.status(400).json('Não foi possível cadastrar o usuario. Tente novamente mais tarde ou entre em contato com o administrador do sistema.');
+        if (!categoria[0]) {
+            return res.status(404).json("A categoria informada não existe.");
         }
 
-        if (novoRestaurante === 0) {
-            return res.status(400).json('Foram encontradas inconsistências nos dados do restaurante. Tente novamente mais tarde ou entre em contato com o administrador do sistema.');
+        // persistência dos dados do usuário no banco de dados
+
+        const usuario = await knex('usuario').insert({nome, email, 'senha' : senhaCriptografada}).returning('*');
+
+        // persistência dos dados do restaurante no banco de dados
+
+        const restaurante = await knex('restaurante').insert({'usuario_id': usuario[0].id, 'nome': nomeRestaurante, descricao, 'categoria_id': idCategoria, 'taxa_entrega': taxaEntrega, 'tempo_entrega_minutos': tempoEntregaEmMinutos, 'valor_minimo_pedido': valorMinimoPedido}).returning('*');
+
+        if (usuario.length === 0) {
+            return res.status(400).json("O usuário não foi cadastrado.");
+        }
+
+        if (restaurante.length === 0) {
+            return res.status(400).json("O restaurante não foi cadastrado.");
         }
 
         return res.status(200).json('Usuário cadastrado com sucesso.');
