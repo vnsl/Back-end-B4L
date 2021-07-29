@@ -18,7 +18,7 @@ const autenticacao = async (req, res, next) => {
         const usuario = await knex('usuario').where({ id }).first();
 
         if (!usuario) {
-            return res.status(404).json("Usuário não encontrado");
+            return res.status(404).json("Token inválido");
         }
 
         const { senha, ...dadosUsuario } = usuario;
