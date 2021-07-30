@@ -7,6 +7,10 @@ const listarProdutos = async (req, res) => {
     try {
         const listaDeProdutos = await knex('produto').where('restaurante_id', '=', usuario.id);
 
+        if(!listaDeProdutos[0]){
+            return res.status(404).json('Não possui produto cadastrado');
+        }
+
         return res.status(200).json(listaDeProdutos);
 
     } catch (error) {
@@ -43,9 +47,9 @@ const cadastrarProduto = async (req, res) => {
 
         const restauranteId = Number(mesmoRestaurante[0].id);
       
-        const produtoExistente = await knex('produto').where({ nome }).first();
+        const produtoExistente = await knex('produto').where('restaurante_id', '=', restauranteId).andWhere('nome', '=', nome);
 
-        if (produtoExistente) {
+        if (produtoExistente[0]) {
             return res.status(400).json("O produto já cadastrado");
         }
 
@@ -65,6 +69,27 @@ const atualizarProduto = async (req, res) => {
 };
 
 const excluirProduto = async (req, res) => {
+    const { usuario } = req;
+    const { id } = req.params;
+
+    try {
+        const produtoEncontrado = await knex('produto').where({restaurante_id: usuario.id, id: id});
+        
+        if(!produtoEncontrado[0]){
+            return res.status(404).json("Produto não encontrado");
+        }
+
+        const produtoExcluido = await knex('produto').where('id', '=', id).del();
+
+        if(!produtoExcluido){
+            return res.status(400).json('Não foi possivel excluir o produto');
+        }
+
+        return res.status(200).json('Produto excluido com sucesso');
+
+    } catch (error) {
+        return res.status(400).json(error.message);
+    }
 
 };
 
