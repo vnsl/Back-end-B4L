@@ -2,6 +2,7 @@ const express = require('express');
 const login = require('./controladores/login');
 const usuarios = require('./controladores/usuarios');
 const produtos = require('./controladores/produtos');
+const categorias = require('./controladores/categorias');
 const autenticacao = require('./filtros/autenticacao');
 
 const rotas = express();
@@ -11,6 +12,9 @@ rotas.post('/login', login.login);
 
 //usuarios
 rotas.post('/usuarios', usuarios.cadastrarUsuario);
+
+//lista de categorias
+rotas.get('/categorias', categorias.listarCategorias);
 
 // verificação de autenticação
 rotas.use(autenticacao);
