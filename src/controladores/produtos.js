@@ -65,6 +65,33 @@ const cadastrarProduto = async (req, res) => {
 };
 
 const atualizarProduto = async (req, res) => {
+    const { nome, descricao, preco, permiteObervacoes } = req.body;
+    const { usuario } = req;
+    const { id } = req.params;
+
+       
+    try {
+
+        await schemaCadastroProduto.validate(req.body);
+
+        const produtoEncontrado = await knex('produto').where({restaurante_id: usuario.id, id: id});
+        
+        if(!produtoEncontrado[0]){
+            return res.status(404).json("Produto não encontrado");
+        }
+    
+        const produtoAtualizado = await knex('produto').where({ id }).update({ nome, descricao, preco, permiteObervacoes });
+
+        if (!produtoAtualizado) {
+            return res.status(400).json("O produto não foi atualizado");
+        }
+
+        return res.status(200).json('O produto atualizado com sucesso.');
+
+
+    } catch (error) {
+        return res.status(400).json(error.message)
+    }
 
 };
 
