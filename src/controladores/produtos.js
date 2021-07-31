@@ -72,8 +72,6 @@ const atualizarProduto = async (req, res) => {
        
     try {
 
-        await schemaCadastroProduto.validate(req.body);
-
         const produtoEncontrado = await knex('produto').where({restaurante_id: usuario.id, id: id});
         
         if(!produtoEncontrado[0]){
