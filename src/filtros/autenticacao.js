@@ -10,6 +10,7 @@ const autenticacao = async (req, res, next) => {
     if (!token) {
         return res.status(404).json('Token não foi informado');
     }
+    
 
     try {
         
