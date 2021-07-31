@@ -80,6 +80,7 @@ const excluirProduto = async (req, res) => {
         }
 
         const produtoExcluido = await knex('produto').where('id', '=', id).del();
+ 
 
         if(!produtoExcluido){
             return res.status(400).json('Não foi possivel excluir o produto');
@@ -94,10 +95,53 @@ const excluirProduto = async (req, res) => {
 };
 
 const ativarProduto = async (req, res) => {
+    const { usuario } = req;
+    const { id } = req.params;
+
+    try {
+        const produtoEncontrado = await knex('produto').where({restaurante_id: usuario.id, id: id});
+        
+        if(!produtoEncontrado[0]){
+            return res.status(404).json("Produto não encontrado");
+        }
+
+        const produtoAtivado = await knex('produto').update('ativo', true).where('id', '=', id);
+
+        if(produtoAtivado === true){
+            return res.status(400).json('Produto já está ativado');
+        }
+
+        return res.status(200).json();
+
+    } catch (error) {
+        return res.status(400).json(error.message);
+    }
 
 };
 
 const desativarProduto = async (req, res) => {
+    const { usuario } = req;
+    const { id } = req.params;
+
+    try {
+        const produtoEncontrado = await knex('produto').where({restaurante_id: usuario.id, id: id});
+        
+        if(!produtoEncontrado[0]){
+            return res.status(404).json("Produto não encontrado");
+        }
+
+        const produtoDesativado = await knex('produto').update('ativo', false).where('id', '=', id);
+
+
+        if(produtoDesativado === false){
+            return res.status(400).json('produto já está desativado');
+        }
+
+        return res.status(200).json('Produto desativado com sucesso');
+
+    } catch (error) {
+        return res.status(400).json(error.message);
+    }
 
 };
 
