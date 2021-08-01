@@ -37,7 +37,7 @@ const obterProduto = async (req, res) => {
 };
 
 const cadastrarProduto = async (req, res) => {
-    const { nome, descricao, preco, permiteObervacoes } = req.body;
+    const { nome, descricao, preco, permiteObservacoes } = req.body;
     const { usuario } = req;
 
     try {
@@ -54,9 +54,9 @@ const cadastrarProduto = async (req, res) => {
         }
 
         const produto = await knex('produto').insert({
-            'nome': nome, descricao, 'preco': preco, 'permite_observacoes': permiteObervacoes, 'restaurante_id': restauranteId }).returning('*');
+            'nome': nome, descricao, 'preco': preco, 'permite_observacoes': permiteObservacoes, 'restaurante_id': restauranteId }).returning('*');
         
-        return res.status(200).json('Produto cadastrado com sucesso');
+        return res.status(200).json();
 
     } catch (error) {
         return res.status(400).json(error.message);
@@ -65,7 +65,7 @@ const cadastrarProduto = async (req, res) => {
 };
 
 const atualizarProduto = async (req, res) => {
-    const { nome, descricao, preco, permiteObervacoes } = req.body;
+    const { nome, descricao, preco, permite_observacoes } = req.body;
     const { usuario } = req;
     const { id } = req.params;
 
@@ -78,13 +78,13 @@ const atualizarProduto = async (req, res) => {
             return res.status(404).json("Produto não encontrado");
         }
     
-        const produtoAtualizado = await knex('produto').where({ id }).update({ nome, descricao, preco, permiteObervacoes });
+        const produtoAtualizado = await knex('produto').where({ id }).update({ nome, descricao, preco, permite_observacoes });
 
         if (!produtoAtualizado) {
             return res.status(400).json("O produto não foi atualizado");
         }
 
-        return res.status(200).json('O produto atualizado com sucesso.');
+        return res.status(200).json();
 
 
     } catch (error) {
@@ -116,7 +116,7 @@ const excluirProduto = async (req, res) => {
             return res.status(400).json('Não foi possivel excluir o produto');
         }
 
-        return res.status(200).json('Produto excluido com sucesso');
+        return res.status(200).json();
 
     } catch (error) {
         return res.status(400).json(error.message);
