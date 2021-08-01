@@ -104,9 +104,14 @@ const excluirProduto = async (req, res) => {
             return res.status(404).json("Produto não encontrado");
         }
 
+        const produtoAtivo = await knex('produto').where('id', '=', id).andWhere('ativo', '=', 'true');
+
+        if(produtoAtivo[0]){
+            return res.status(404).json("Não é possivel excluir produto ativo");
+        }
+
         const produtoExcluido = await knex('produto').where('id', '=', id).del();
  
-
         if(!produtoExcluido){
             return res.status(400).json('Não foi possivel excluir o produto');
         }
