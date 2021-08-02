@@ -56,7 +56,7 @@ const cadastrarProduto = async (req, res) => {
         const produto = await knex('produto').insert({
             'nome': nome, descricao, 'preco': preco, 'permite_observacoes': permiteObservacoes, 'restaurante_id': restauranteId }).returning('*');
         
-        return res.status(200).json();
+        return res.status(200).json('');
 
     } catch (error) {
         return res.status(400).json(error.message);
@@ -84,7 +84,7 @@ const atualizarProduto = async (req, res) => {
             return res.status(400).json("O produto não foi atualizado");
         }
 
-        return res.status(200).json();
+        return res.status(200).json('');
 
 
     } catch (error) {
@@ -116,7 +116,7 @@ const excluirProduto = async (req, res) => {
             return res.status(400).json('Não foi possivel excluir o produto');
         }
 
-        return res.status(200).json();
+        return res.status(200).json('');
 
     } catch (error) {
         return res.status(400).json(error.message);
@@ -141,7 +141,7 @@ const ativarProduto = async (req, res) => {
             return res.status(400).json('Produto já está ativado');
         }
 
-        return res.status(200).json();
+        return res.status(200).json('');
 
     } catch (error) {
         return res.status(400).json(error.message);
