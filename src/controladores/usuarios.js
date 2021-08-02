@@ -6,6 +6,7 @@ const cadastrarUsuario = async (req, res) => {
 
     const {nome: nomeRestaurante, descricao, idCategoria, taxaEntrega, tempoEntregaEmMinutos, valorMinimoPedido} = req.body.restaurante;
 
+    
     // validacao dados do usuario
 
     if (!nome) {
@@ -41,6 +42,7 @@ const cadastrarUsuario = async (req, res) => {
     if(!valorMinimoPedido) {
         return res.status(404).json("Favor informar o valor mínimo do pedido.");
     }
+
 
     try {
         const quantidadeUsuarios = await knex('usuario').where({ email }).first();
