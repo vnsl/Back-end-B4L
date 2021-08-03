@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const cadastrarUsuario = async (req, res) => {
     const { nome, email, senha} = req.body;
 
-    const {nome: nomeRestaurante, descricao, idCategoria, taxaEntrega, tempoEntregaEmMinutos, valorMinimoPedido} = req.body.restaurante;
+    const { nome: nomeRestaurante, descricao, idCategoria, taxaEntrega, tempoEntregaEmMinutos, valorMinimoPedido } = req.body.restaurante;
 
     
     // validacao dados do usuario
