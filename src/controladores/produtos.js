@@ -47,7 +47,7 @@ const cadastrarProduto = async (req, res) => {
 
         const restauranteId = Number(mesmoRestaurante[0].id);
       
-        const produtoExistente = await knex('produto').where('restaurante_id', '=', restauranteId).andWhere('nome', '=', nome);
+        const produtoExistente = await knex('produto').where('restaurante_id', '=', restauranteId).andWhere('nome', 'ilike', nome);
 
         if (produtoExistente[0]) {
             return res.status(400).json("O produto já cadastrado");
