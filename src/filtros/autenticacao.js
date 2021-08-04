@@ -11,7 +11,6 @@ const autenticacao = async (req, res, next) => {
         return res.status(404).json('Token não foi informado');
     }
     
-
     try {
         
         const { id } = jwt.verify(token, senhaHash);
@@ -22,10 +21,15 @@ const autenticacao = async (req, res, next) => {
             return res.status(404).json("Token inválido");
         }
 
+        const restaurante = await knex('restaurante').where('usuario_id', '=', `${id}`).first();
+        
         const { senha, ...dadosUsuario } = usuario;
 
-        req.usuario = dadosUsuario;
-
+        req.usuario = { 
+            dadosUsuario,
+            restaurante
+        }
+    
         next();
 
         } catch (error) {

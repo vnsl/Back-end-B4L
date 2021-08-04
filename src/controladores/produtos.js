@@ -3,9 +3,10 @@ const schemaCadastroProduto = require('../validacoes/schemaCadastroProduto');
 
 const listarProdutos = async (req, res) => {
     const { usuario } = req;
+    const { restaurante } = usuario;
 
     try {
-        const listaDeProdutos = await knex('produto').where('restaurante_id', '=', usuario.id);
+        const listaDeProdutos = await knex('produto').where('restaurante_id', '=', restaurante.id);
 
         if(!listaDeProdutos[0]){
             return res.status(404).json('Não possui produto cadastrado');
@@ -20,10 +21,11 @@ const listarProdutos = async (req, res) => {
 
 const obterProduto = async (req, res) => {
     const { usuario } = req;
+    const { restaurante } = usuario;    
     const { id } = req.params;
 
     try {
-        const produtoEncontrado = await knex('produto').where({restaurante_id: usuario.id, id: id});
+        const produtoEncontrado = await knex('produto').where({restaurante_id: restaurante.id, id: id});
         
         if(!produtoEncontrado[0]){
             return res.status(404).json("Produto não encontrado");
@@ -39,22 +41,19 @@ const obterProduto = async (req, res) => {
 const cadastrarProduto = async (req, res) => {
     const { nome, descricao, preco, permiteObservacoes } = req.body;
     const { usuario } = req;
+    const { restaurante } = usuario
 
     try {
         await schemaCadastroProduto.validate(req.body);
-
-        const mesmoRestaurante = await knex.select('id').from('restaurante').where('id', '=', usuario.id);
-
-        const restauranteId = Number(mesmoRestaurante[0].id);
-      
-        const produtoExistente = await knex('produto').where('restaurante_id', '=', restauranteId).andWhere('nome', 'ilike', nome);
+    
+        const produtoExistente = await knex('produto').where('restaurante_id', '=', restaurante.id).andWhere('nome', 'ilike', nome);
 
         if (produtoExistente[0]) {
             return res.status(400).json("O produto já cadastrado");
         }
 
         const produto = await knex('produto').insert({
-            'nome': nome, descricao, 'preco': preco, 'permite_observacoes': permiteObservacoes, 'restaurante_id': restauranteId }).returning('*');
+            'nome': nome, descricao, 'preco': preco, 'permite_observacoes': permiteObservacoes, 'restaurante_id': restaurante.id }).returning('*');
         
         return res.status(200).json('');
 
@@ -67,12 +66,13 @@ const cadastrarProduto = async (req, res) => {
 const atualizarProduto = async (req, res) => {
     const { nome, descricao, preco, permite_observacoes } = req.body;
     const { usuario } = req;
+    const { restaurante } = usuario;
     const { id } = req.params;
 
        
     try {
 
-        const produtoEncontrado = await knex('produto').where({restaurante_id: usuario.id, id: id});
+        const produtoEncontrado = await knex('produto').where({restaurante_id: restaurante.id, id: id});
         
         if(!produtoEncontrado[0]){
             return res.status(404).json("Produto não encontrado");
@@ -95,10 +95,11 @@ const atualizarProduto = async (req, res) => {
 
 const excluirProduto = async (req, res) => {
     const { usuario } = req;
+    const { restaurante } = usuario;
     const { id } = req.params;
 
     try {
-        const produtoEncontrado = await knex('produto').where({restaurante_id: usuario.id, id: id});
+        const produtoEncontrado = await knex('produto').where({restaurante_id: restaurante.id, id: id});
         
         if(!produtoEncontrado[0]){
             return res.status(404).json("Produto não encontrado");
@@ -126,10 +127,11 @@ const excluirProduto = async (req, res) => {
 
 const ativarProduto = async (req, res) => {
     const { usuario } = req;
+    const { restaurante } = usuario;
     const { id } = req.params;
 
     try {
-        const produtoEncontrado = await knex('produto').where({restaurante_id: usuario.id, id: id});
+        const produtoEncontrado = await knex('produto').where({restaurante_id: restaurante.id, id: id});
         
         if(!produtoEncontrado[0]){
             return res.status(404).json("Produto não encontrado");
@@ -151,10 +153,11 @@ const ativarProduto = async (req, res) => {
 
 const desativarProduto = async (req, res) => {
     const { usuario } = req;
+    const { restaurante } = usuario;
     const { id } = req.params;
 
     try {
-        const produtoEncontrado = await knex('produto').where({restaurante_id: usuario.id, id: id});
+        const produtoEncontrado = await knex('produto').where({restaurante_id: restaurante.id, id: id});
         
         if(!produtoEncontrado[0]){
             return res.status(404).json("Produto não encontrado");

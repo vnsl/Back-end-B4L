@@ -23,7 +23,7 @@ const cadastrarUsuario = async (req, res) => {
         const categoria = await knex('categoria').where('id', idCategoria).first();
 
         if (!categoria) {
-            return res.status(404).json("A categoria informada não existe.");
+            return res.status(404).json("a categoria informada não existe.");
         }
 
         // persistência dos dados do usuário no banco de dados
@@ -49,6 +49,12 @@ const cadastrarUsuario = async (req, res) => {
     }
 }
 
+const atualizarUsuario = async (req, res) => {
+
+
+};
+
 module.exports = {
-    cadastrarUsuario
+    cadastrarUsuario,
+    atualizarUsuario
 }
