@@ -1,50 +1,17 @@
 const knex = require('../conexao');
 const bcrypt = require('bcrypt');
+const schemaCadastroUsuario = require('../validacoes/schemaCadastroUsuario');
+const schemaCadastroRestaurante = require('../validacoes/schemaCadastroRestaurante');
 
 const cadastrarUsuario = async (req, res) => {
     const { nome, email, senha} = req.body;
 
     const { nome: nomeRestaurante, descricao, idCategoria, taxaEntrega, tempoEntregaEmMinutos, valorMinimoPedido } = req.body.restaurante;
 
-    
-    // validacao dados do usuario
-
-    if (!nome) {
-        return res.status(404).json("Favor informar o nome do usuário.");
-    }
-
-    if (!email) {
-        return res.status(404).json("Favor informar o email do usuário.");
-    }
-    
-    if (!senha) {
-        return res.status(404).json("Favor informar a senha.");
-    }
-
-    // validacao dados do restaurante
-
-    if(!nomeRestaurante) {
-        return res.status(404).json("Favor informar o nome do restaurante.");
-    }
-
-    if(!idCategoria) {
-        return res.status(404).json("Favor informar o id relativo à Categoria do restaurante.");
-    }
-
-    if(!taxaEntrega) {
-        return res.status(404).json("Favor informar a taxa de entrega do restaurante.");
-    }
-
-    if(!tempoEntregaEmMinutos) {
-        return res.status(404).json("Favor informar o tempo de entrega do restaurante em minutos.");
-    }
-
-    if(!valorMinimoPedido) {
-        return res.status(404).json("Favor informar o valor mínimo do pedido.");
-    }
-
-
     try {
+        await schemaCadastroUsuario.validate(req.body);
+        await schemaCadastroRestaurante.validate(req.body.restaurante);
+
         const quantidadeUsuarios = await knex('usuario').where({ email }).first();
 
         if (quantidadeUsuarios) {
