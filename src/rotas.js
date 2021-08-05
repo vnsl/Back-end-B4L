@@ -20,7 +20,7 @@ rotas.get('/categorias', categorias.listarCategorias);
 rotas.use(autenticacao);
 
 // edição usuario e restaurante
-rotas.put('usuarios/:id', usuarios.atualizarUsuario);
+rotas.put('/usuarios/:id', usuarios.atualizarUsuario);
 
 //Crud de produtos
 rotas.get('/produtos', produtos.listarProdutos);
