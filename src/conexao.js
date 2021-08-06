@@ -14,10 +14,10 @@
 const knex = require('knex')({
     client: 'pg',
     connection: {
-        host: 'localhost',
-        user: 'postgres',
-        database: 'cubos_food',
-        password: '123456',
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        database: process.env.DB_DATABASE,
+        password: process.env.DB_PASSWORD,
     }
 });
 
