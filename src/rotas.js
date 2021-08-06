@@ -19,6 +19,9 @@ rotas.get('/categorias', categorias.listarCategorias);
 // verificação de autenticação
 rotas.use(autenticacao);
 
+// edição usuario e restaurante
+rotas.put('usuarios/:id', usuarios.atualizarUsuario);
+
 //Crud de produtos
 rotas.get('/produtos', produtos.listarProdutos);
 rotas.get('/produtos/:id', produtos.obterProduto);
@@ -27,6 +30,8 @@ rotas.put('/produtos/:id', produtos.atualizarProduto);
 rotas.delete('/produtos/:id', produtos.excluirProduto);
 rotas.post('/produtos/:id/ativar', produtos.ativarProduto);
 rotas.post('/produtos/:id/desativar', produtos.desativarProduto);
+
+
 
 
 module.exports = rotas;
