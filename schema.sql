@@ -22,6 +22,7 @@ create table if not exists restaurante (
   	taxa_entrega int default 0,
 	tempo_entrega_minutos int default 30,
   	valor_minimo_pedido int default 0,
+	imagem text,
   	foreign key (usuario_id) references usuario (id),
   	foreign key (categoria_id) references categoria (id) 	
 );

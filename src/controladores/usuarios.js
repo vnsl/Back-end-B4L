@@ -51,8 +51,8 @@ const cadastrarUsuario = async (req, res) => {
 }
 
 const atualizarUsuario = async (req, res) => {
-    const { nome, email, senha} = req.body;
-    const { nome: nomeRestaurante, descricao, idCategoria, taxaEntrega, tempoEntregaEmMinutos, valorMinimoPedido } = req.body.restaurante;
+    const { nome, email, senha, novaSenha } = req.body;
+    const { nome: nomeRestaurante, descricao, imagem, idCategoria, taxaEntrega, tempoEntregaEmMinutos, valorMinimoPedido } = req.body.restaurante;
     const { usuario } = req;
     const { restaurante } = usuario;
     const { id } = req.params;
@@ -67,22 +67,36 @@ const atualizarUsuario = async (req, res) => {
             return res.status(404).json("Usuário não encontrado");
         }
 
-        const categoria = await knex('categoria').where('id', idCategoria).first();
+               const categoria = await knex('categoria').where('id', idCategoria).first();
 
         if (!categoria) {
             return res.status(404).json("a categoria informada não existe.");
         }
 
-        const senhaCriptografada = await bcrypt.hash(senha, 10);
 
-        const usuarioAtualizado = await knex('usuario').where({ id }).update({ nome, email, 'senha': senhaCriptografada  });
+        if(novaSenha){
+         
+            const senhaValidada = await bcrypt.compare(senha, usuarioEncontrado[0].senha);
+
+            if(!senhaValidada){
+            return res.status(404).json("A senha atual informada está incorreta");
+            }
+
+            const senhaCriptografada = await bcrypt.hash(novaSenha, 10);
+
+            const senhaAtualizada = await knex('usuario').where({ id }).update({ 'senha': senhaCriptografada });          
+        }
+        
+
+        const usuarioAtualizado = await knex('usuario').where({ id }).update({ nome, email });
 
         const restauranteAtualizado = await knex('restaurante').where({ id }).update({ 
             'nome': nomeRestaurante, 
-            descricao, 
+            descricao,
+            imagem,
             'categoria_id': idCategoria, 
             'taxa_entrega': taxaEntrega, 
-            'tempo_entrega_minutos': tempoEntregaEmMinutos, 
+            'tempo_entrega_minutos': tempoEntregaEmMinutos,
             'valor_minimo_pedido': valorMinimoPedido 
         });
 
@@ -93,6 +107,7 @@ const atualizarUsuario = async (req, res) => {
         if (!restauranteAtualizado) {
             return res.status(400).json("O restaurante não foi atualizado");
         }
+
 
         return res.status(200).json('');
         
