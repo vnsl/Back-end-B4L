@@ -39,7 +39,7 @@ const obterProduto = async (req, res) => {
 };
 
 const cadastrarProduto = async (req, res) => {
-    const { nome, descricao, preco, permiteObservacoes } = req.body;
+    const { nome, descricao, preco, ativo, permiteObservacoes } = req.body;
     const { usuario } = req;
     const { restaurante } = usuario
 
@@ -53,7 +53,7 @@ const cadastrarProduto = async (req, res) => {
         }
 
         const produto = await knex('produto').insert({
-            'nome': nome, descricao, 'preco': preco, 'permite_observacoes': permiteObservacoes, 'restaurante_id': restaurante.id }).returning('*');
+            'nome': nome, descricao, 'preco': preco, ativo, 'permite_observacoes': permiteObservacoes, 'restaurante_id': restaurante.id }).returning('*');
         
         return res.status(200).json('');
 
@@ -64,7 +64,7 @@ const cadastrarProduto = async (req, res) => {
 };
 
 const atualizarProduto = async (req, res) => {
-    const { nome, descricao, preco, permite_observacoes } = req.body;
+    const { nome, descricao, preco, ativo, permite_observacoes } = req.body;
     const { usuario } = req;
     const { restaurante } = usuario;
     const { id } = req.params;
@@ -78,7 +78,7 @@ const atualizarProduto = async (req, res) => {
             return res.status(404).json("Produto não encontrado");
         }
     
-        const produtoAtualizado = await knex('produto').where({ id }).update({ nome, descricao, preco, permite_observacoes });
+        const produtoAtualizado = await knex('produto').where({ id }).update({ nome, descricao, preco, ativo, permite_observacoes });
 
         if (!produtoAtualizado) {
             return res.status(400).json("O produto não foi atualizado");
