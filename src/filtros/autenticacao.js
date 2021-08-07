@@ -15,7 +15,7 @@ const autenticacao = async (req, res, next) => {
     try {
         
         const { id } = jwt.verify(token, senhaHash);
-
+        
         const usuario = await knex('usuario').where({ id }).first();
 
         if (!usuario) {
