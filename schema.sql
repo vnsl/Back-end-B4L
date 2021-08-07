@@ -35,6 +35,7 @@ create table if not exists produto (
   	preco int not null,
   	ativo boolean default true,
   	permite_observacoes boolean default false,
+	imagem text,
   	foreign key (restaurante_id) references restaurante (id) 
 );
 
