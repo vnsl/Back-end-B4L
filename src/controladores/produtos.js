@@ -39,7 +39,7 @@ const obterProduto = async (req, res) => {
 };
 
 const cadastrarProduto = async (req, res) => {
-    const { nome, descricao, preco, ativo, permiteObservacoes } = req.body;
+    const { nome, descricao, preco, ativo, permite_observacoes } = req.body;
     const { usuario } = req;
     const { restaurante } = usuario
 
@@ -53,7 +53,7 @@ const cadastrarProduto = async (req, res) => {
         }
 
         const produto = await knex('produto').insert({
-            'nome': nome, descricao, 'preco': preco, ativo, 'permite_observacoes': permiteObservacoes, 'restaurante_id': restaurante.id }).returning('*');
+            'nome': nome, descricao, 'preco': preco, ativo, 'permite_observacoes': permite_observacoes, 'restaurante_id': restaurante.id }).returning('*');
         
         return res.status(200).json('');
 
