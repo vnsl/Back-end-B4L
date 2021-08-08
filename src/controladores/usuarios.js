@@ -57,6 +57,8 @@ const atualizarUsuario = async (req, res) => {
     const { restaurante } = usuario;
     const { id } = req.params;
 
+    console.log(req.body);
+
     try {
         await schemaAtualizarUsuario.validate(req.body);
         await schemaCadastroRestaurante.validate(req.body.restaurante);
