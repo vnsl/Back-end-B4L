@@ -51,7 +51,7 @@ const cadastrarUsuario = async (req, res) => {
 }
 
 const atualizarUsuario = async (req, res) => {
-    const { nome, email, senha, novaSenha } = req.body;
+    const { nome, email, senha, nova_senha } = req.body;
     const { nome: nome_restaurante, descricao, imagem, categoria_id, taxa_entrega, tempo_entrega_minutos, valor_minimo_pedido } = req.body.restaurante;
     const { usuario } = req;
     const { restaurante } = usuario;
@@ -74,7 +74,7 @@ const atualizarUsuario = async (req, res) => {
         }
 
 
-        if(novaSenha){
+        if(nova_senha){
          
             const senhaValidada = await bcrypt.compare(senha, usuarioEncontrado[0].senha);
 
@@ -82,7 +82,7 @@ const atualizarUsuario = async (req, res) => {
             return res.status(404).json("A senha atual informada está incorreta");
             }
 
-            const senhaCriptografada = await bcrypt.hash(novaSenha, 10);
+            const senhaCriptografada = await bcrypt.hash(nova_senha, 10);
 
             const senhaAtualizada = await knex('usuario').where({ id }).update({ 'senha': senhaCriptografada });          
         }
