@@ -50,4 +50,3 @@ insert into categoria (nome, img_categoria) values ('Mexicano', 'https://lh3.goo
 insert into categoria (nome, img_categoria) values ('Brasileira', 'https://lh3.googleusercontent.com/pw/AM-JKLUh_IAcoFunHo0EiJFRWfiq9z10dzUTJWcFivY6orCoKn5UpciddmJuUSbnrX4h9qM_MlFDE3boqhcl1EoGcBLLyqil7KvlZwvjDDv5y9LAPyEZH_5BBeZCmabQdLLxryJcBVIhLlyjJoUva_hutXWM=w1366-h236-no?authuser=0');
 insert into categoria (nome, img_categoria) values ('Italiana', 'https://lh3.googleusercontent.com/pw/AM-JKLUcY8UzcvHSRfjs2uYLhUQJbqzFdZdw8bJS_jAKFxY1FhO1a1Q996_r0UEUeDBZUTSbRYT43802NpblH70OM9OEBOsmGDYon6FRpNbDu7Kt95BtrRVioWyDJ3yLtx5U9AGO0NNiyiQN3EshjSsRReDr=w1366-h236-no?authuser=0');
 insert into categoria (nome, img_categoria) values ('Árabe', 'https://lh3.googleusercontent.com/pw/AM-JKLUiDs4SyCM4Ll7B1bA11EjTZUPiJmBVN37N1DBJl-xG9LeC_neJjdjtEiB8ty2Q6qt1Gscuw82noVFCq6pChNhb5Vfaw_d-iM_36551FGS6cYLOtJcXIOYm_Iv-pkTouL9p-K5EOg-cvCqJKKTWLd1A=w1366-h236-no?authuser=0');
-
