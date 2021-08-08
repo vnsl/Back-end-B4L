@@ -3,9 +3,16 @@ const supabase = require('../supabase');
 const enviarImagem = async(req, res) => {
     const { id, nome, pasta, imagem } = req.body;
 
-    const buffer = Buffer.from(imagem, 'base64');
+    const imagemConvertida = imagem.replace("data:image/jpeg;base64,", "");
+    const nomeImagem = nome.replace(" ", "");
 
-    const nomeId = id + nome;
+    console.log(nomeImagem);
+
+    const buffer = Buffer.from(imagemConvertida, 'base64');
+
+    const nomeId = id + nomeImagem;
+
+    const nomeUrl = pasta + '/' + nomeId;
 
     try {
         const { data, error } = await supabase
@@ -20,7 +27,7 @@ const enviarImagem = async(req, res) => {
         const { publicURL, error: errorPublicUrl } = supabase
             .storage
             .from(process.env.SUPABASE_BUCKET)
-            .getPublicUrl(nome)
+            .getPublicUrl(nomeUrl);
 
             if(errorPublicUrl){
                 return res.status(400).json(errorPublicUrl.message);
