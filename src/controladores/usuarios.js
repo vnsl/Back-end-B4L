@@ -7,7 +7,7 @@ const schemaAtualizarUsuario = require('../validacoes/schemaAtualizarUsuario');
 const cadastrarUsuario = async (req, res) => {
     const { nome, email, senha} = req.body;
 
-    const { nome: nomeRestaurante, descricao, idCategoria, taxaEntrega, tempoEntregaEmMinutos, valorMinimoPedido } = req.body.restaurante;
+    const { nome: nome_restaurante, descricao, categoria_id, taxa_entrega, tempo_entrega_minutos, valor_minimo_pedido } = req.body.restaurante;
 
     try {
         await schemaCadastroUsuario.validate(req.body);
@@ -21,7 +21,7 @@ const cadastrarUsuario = async (req, res) => {
 
         const senhaCriptografada = await bcrypt.hash(senha, 10);
 
-        const categoria = await knex('categoria').where('id', idCategoria).first();
+        const categoria = await knex('categoria').where('id', categoria_id).first();
 
         if (!categoria) {
             return res.status(404).json("a categoria informada não existe.");
@@ -33,7 +33,7 @@ const cadastrarUsuario = async (req, res) => {
 
         // persistência dos dados do restaurante no banco de dados
 
-        const restaurante = await knex('restaurante').insert({'usuario_id': usuario[0].id, 'nome': nomeRestaurante, descricao, 'categoria_id': idCategoria, 'taxa_entrega': taxaEntrega, 'tempo_entrega_minutos': tempoEntregaEmMinutos, 'valor_minimo_pedido': valorMinimoPedido}).returning('*');
+        const restaurante = await knex('restaurante').insert({'usuario_id': usuario[0].id, 'nome': nome_restaurante, descricao, 'categoria_id': categoria_id, 'taxa_entrega': taxa_entrega, 'tempo_entrega_minutos': tempo_entrega_minutos, 'valor_minimo_pedido': valor_minimo_pedido}).returning('*');
 
         if (usuario.length === 0) {
             return res.status(400).json("O usuário não foi cadastrado.");
@@ -52,7 +52,7 @@ const cadastrarUsuario = async (req, res) => {
 
 const atualizarUsuario = async (req, res) => {
     const { nome, email, senha, novaSenha } = req.body;
-    const { nome: nomeRestaurante, descricao, imagem, idCategoria, taxaEntrega, tempoEntregaEmMinutos, valorMinimoPedido } = req.body.restaurante;
+    const { nome: nome_restaurante, descricao, imagem, categoria_id, taxa_entrega, tempo_entrega_minutos, valor_minimo_pedido } = req.body.restaurante;
     const { usuario } = req;
     const { restaurante } = usuario;
     const { id } = req.params;
@@ -67,7 +67,7 @@ const atualizarUsuario = async (req, res) => {
             return res.status(404).json("Usuário não encontrado");
         }
 
-               const categoria = await knex('categoria').where('id', idCategoria).first();
+               const categoria = await knex('categoria').where('id', categoria_id).first();
 
         if (!categoria) {
             return res.status(404).json("a categoria informada não existe.");
@@ -91,13 +91,13 @@ const atualizarUsuario = async (req, res) => {
         const usuarioAtualizado = await knex('usuario').where({ id }).update({ nome, email });
 
         const restauranteAtualizado = await knex('restaurante').where({ id }).update({ 
-            'nome': nomeRestaurante, 
+            'nome': nome_restaurante, 
             descricao,
             imagem,
-            'categoria_id': idCategoria, 
-            'taxa_entrega': taxaEntrega, 
-            'tempo_entrega_minutos': tempoEntregaEmMinutos,
-            'valor_minimo_pedido': valorMinimoPedido 
+            'categoria_id': categoria_id, 
+            'taxa_entrega': taxa_entrega, 
+            'tempo_entrega_minutos': tempo_entrega_minutos,
+            'valor_minimo_pedido': valor_minimo_pedido 
         });
 
         if (!usuarioAtualizado) {
