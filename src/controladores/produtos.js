@@ -8,9 +8,9 @@ const listarProdutos = async (req, res) => {
     try {
         const listaDeProdutos = await knex('produto').where('restaurante_id', '=', restaurante.id);
 
-        if(!listaDeProdutos[0]){
-            return res.status(404).json('Não possui produto cadastrado');
-        }
+        // if(!listaDeProdutos[0]){
+        //     return res.status(404).json('Não possui produto cadastrado');
+        // }
 
         return res.status(200).json(listaDeProdutos);
 
