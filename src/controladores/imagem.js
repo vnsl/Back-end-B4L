@@ -6,13 +6,8 @@ const enviarImagem = async(req, res) => {
     const randomName = Date.now();
 
     const imagemConvertida = imagem.replace("data:image/jpeg;base64,", "");
-    // const nomeImagem = nome.replace(" ", "");
 
     const buffer = Buffer.from(imagemConvertida, 'base64');
-
-    // const nomeId = id + nomeImagem;
-
-    // const nomeUrl = pasta + '/' + nomeId;
 
     try {
         const { data, error } = await supabase
@@ -32,7 +27,6 @@ const enviarImagem = async(req, res) => {
             if(errorPublicUrl){
                 return res.status(400).json(errorPublicUrl.message);
             }
-
 
         return res.status(200).json(publicURL);    
         
