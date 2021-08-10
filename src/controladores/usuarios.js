@@ -60,8 +60,6 @@ const atualizarUsuario = async (req, res) => {
     console.log(req.body);
 
     try {
-        await schemaAtualizarUsuario.validate(req.body);
-        await schemaCadastroRestaurante.validate(req.body.restaurante);
 
         const usuarioEncontrado = await knex('usuario').where({'id': id}).andWhere('id', '=', restaurante.id);
         
@@ -69,20 +67,22 @@ const atualizarUsuario = async (req, res) => {
             return res.status(404).json("Usuário não encontrado");
         }
 
-               const categoria = await knex('categoria').where('id', categoria_id).first();
+        const senhaValidada = await bcrypt.compare(senha, usuarioEncontrado[0].senha);
+
+        if(!senhaValidada){
+        return res.status(404).json("A senha atual informada está incorreta");
+        }
+
+        await schemaAtualizarUsuario.validate(req.body);
+        await schemaCadastroRestaurante.validate(req.body.restaurante);
+
+        const categoria = await knex('categoria').where('id', categoria_id).first();
 
         if (!categoria) {
             return res.status(404).json("a categoria informada não existe.");
         }
 
-
         if(nova_senha){
-         
-            const senhaValidada = await bcrypt.compare(senha, usuarioEncontrado[0].senha);
-
-            if(!senhaValidada){
-            return res.status(404).json("A senha atual informada está incorreta");
-            }
 
             const senhaCriptografada = await bcrypt.hash(nova_senha, 10);
 
