@@ -11,21 +11,27 @@ const autenticacao = async (req, res, next) => {
         return res.status(404).json('Token não foi informado');
     }
     
-
     try {
         
         const { id } = jwt.verify(token, senhaHash);
+<<<<<<< HEAD
         
         const usuario = await knex('usuario').where({ id }).first();
+=======
 
-        if (!usuario) {
+        const consumidor = await knex('consumidor').where({ id }).first();
+>>>>>>> hml
+
+        if (!consumidor) {
             return res.status(404).json("Token inválido");
         }
+        
+        const { senha, ...dadosConsumidor } = consumidor;
 
-        const { senha, ...dadosUsuario } = usuario;
-
-        req.usuario = dadosUsuario;
-
+        req.consumidor = { 
+            dadosConsumidor
+        }
+    
         next();
 
         } catch (error) {
