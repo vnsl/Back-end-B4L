@@ -9,4 +9,4 @@ app.use(express.json({ limit: '5mb' }));
 app.use(cors());
 app.use(rotas);
 
-app.listen(3001);
+app.listen(3000);
