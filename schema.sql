@@ -17,7 +17,7 @@ create table if not exists restaurante (
 	id serial primary key,
   	usuario_id int not null,
   	nome varchar(50) not null,
-  	descricao varchar(100),
+  	descricao text,
   	categoria_id int not null,
   	taxa_entrega int default 0,
 	tempo_entrega_minutos int default 30,
