@@ -1,15 +1,8 @@
-create database cubos_food;
-
-create table if not exists categoria (
-	id serial primary key,
-  	nome varchar(30) not null,
-	img_categoria text
-);
-
-create table if not exists usuario (
+create table if not exists consumidor (
 	id serial primary key,
   	nome varchar(100) not null,
   	email varchar(100) not null,
+	telefone int not null,
   	senha text not null
 );
 
