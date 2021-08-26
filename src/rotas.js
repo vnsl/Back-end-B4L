@@ -4,6 +4,7 @@ const usuarios = require('./controladores/usuarios');
 const produtos = require('./controladores/produtos');
 const categorias = require('./controladores/categorias');
 const imagem = require('./controladores/imagem');
+const pedidos = require('./controladores/pedidos');
 const autenticacao = require('./filtros/autenticacao');
 
 const rotas = express();
@@ -34,6 +35,9 @@ rotas.put('/produtos/:id', produtos.atualizarProduto);
 rotas.delete('/produtos/:id', produtos.excluirProduto);
 rotas.post('/produtos/:id/ativar', produtos.ativarProduto);
 rotas.post('/produtos/:id/desativar', produtos.desativarProduto);
+
+// Listar Pedidos
+rotas.get('/pedidos', pedidos.listarPedidos);
 
 
 
