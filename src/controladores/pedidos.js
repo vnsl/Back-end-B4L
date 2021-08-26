@@ -5,9 +5,12 @@ const listarPedidos = async (req, res) => {
     const { restaurante } = usuario;
 
     try {
-        const listaDePedidos = await knex('pedido').where('restaurante_id', '=', restaurante.id);
+        const detalhesPedido = await knex('pedido').leftJoin('detalhepedido', 'pedido.id', 'detalhepedido.pedido_id')
+        .leftJoin('consumidor', 'pedido.consumidor_id', 'consumidor.id').leftJoin('endereco', 'consumidor.id', 'endereco.consumidor_id')
+        .where('pedido.restaurante_id', '=', restaurante.id);    
 
-        return res.status(200).json(listaDePedidos);
+
+        return res.status(200).json(detalhesPedido);
         
     } catch (error) {
         return res.status(400).json(error.message);
