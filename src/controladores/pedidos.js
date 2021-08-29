@@ -5,6 +5,10 @@ const listarPedidos = async (req, res) => {
     const { restaurante } = usuario;
 
     try {
+        const pedidos = await knex('pedido')
+        .where('pedido.restaurante_id', '=', restaurante.id);
+
+
         const detalhesPedido = await knex('pedido')
         .where('pedido.restaurante_id', '=', restaurante.id)
         .leftJoin('detalhepedido', 'pedido.id', 'detalhepedido.pedido_id')
@@ -13,7 +17,7 @@ const listarPedidos = async (req, res) => {
         .leftJoin('produto', 'produto.id', 'detalhepedido.produto_id');
 
         const arrayPedidos = await detalhesPedido.map(pedido => {
-            const pedidoIndividual = {
+            return {
               id: pedido.pedido_id,
               nome_produto: pedido.nome,
               imagem_produto: pedido.imagem,
@@ -25,10 +29,14 @@ const listarPedidos = async (req, res) => {
               valor_total: pedido.valor_total_produto
             //   somar valor total com a taxa de entrega no front
             }
-            return pedidoIndividual;
         });
 
-        return res.status(200).json(arrayPedidos);
+        const resposta = {
+            pedidos,
+            arrayPedidos
+        }
+
+        return res.status(200).json(resposta);
         
     } catch (error) {
         return res.status(400).json(error.message);
