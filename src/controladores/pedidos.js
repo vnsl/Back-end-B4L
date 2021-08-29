@@ -19,6 +19,7 @@ const listarPedidos = async (req, res) => {
         const arrayPedidos = await detalhesPedido.map(pedido => {
             return {
               id: pedido.pedido_id,
+              produto_id: pedido.produto_id,
               nome_produto: pedido.nome,
               imagem_produto: pedido.imagem,
               qtd_produto: pedido.quantidade_produto,
@@ -27,7 +28,6 @@ const listarPedidos = async (req, res) => {
               complemento: pedido.complemento,
               nome_cliente: pedido.nome_consumidor,
               valor_total: pedido.valor_total_produto
-            //   somar valor total com a taxa de entrega no front
             }
         });
 
