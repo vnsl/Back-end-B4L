@@ -43,6 +43,52 @@ const listarPedidos = async (req, res) => {
     }
 }
 
+const ativarSaiuParaEntrega = async (req, res) => {
+    const { usuario } = req;
+    const { restaurante } = usuario;
+    const { id } = req.params;
+
+    try {
+        const pedidoEncontrado = await knex('pedido').where({restaurante_id: restaurante.id, id: id});
+        
+        if(!pedidoEncontrado[0]){
+            return res.status(404).json("Pedido não encontrado");
+        }
+
+        const pedidoAtivado = await knex('pedido').update('saiu_entrega', true).where('id', '=', id);
+
+        return res.status(200).json('');
+
+    } catch (error) {
+        return res.status(400).json(error.message);
+    }
+
+};
+
+const ativarPedidoFinalizado = async (req, res) => {
+    const { usuario } = req;
+    const { restaurante } = usuario;
+    const { id } = req.params;
+
+    try {
+        const pedidoEncontrado = await knex('pedido').where({restaurante_id: restaurante.id, id: id});
+        
+        if(!pedidoEncontrado[0]){
+            return res.status(404).json("Pedido não encontrado");
+        }
+
+        const pedidoFinalizado = await knex('pedido').update('pedido_finalizado', true).where('id', '=', id);
+
+        return res.status(200).json('');
+
+    } catch (error) {
+        return res.status(400).json(error.message);
+    }
+
+};
+
 module.exports = {
-    listarPedidos
+    listarPedidos,
+    ativarSaiuParaEntrega,
+    ativarPedidoFinalizado
 }
