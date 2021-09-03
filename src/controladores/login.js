@@ -11,28 +11,30 @@ const login = async (req, res) => {
     try {
         await schemaLogin.validate(req.body);
 
-        const consumidor = await knex('consumidor').where({ email }).first();
+        const usuario = await knex('usuario').where({ email }).first();
         
-        if (!consumidor) {
-            return res.status(404).json("Consumidor não encontrado");
+        if (!usuario) {
+            return res.status(404).json("Usuário não encontrado");
         }
 
-        const senhaValidada = await bcrypt.compare(senha, consumidor.senha);
+        const restaurante = await knex('restaurante').where('usuario_id', '=', `${usuario.id}`).first();
+
+        const senhaValidada = await bcrypt.compare(senha, usuario.senha);
 
         if(!senhaValidada) {
-            return res.status(400).json("O endereço de email ou a senha que você inseriu não são válidos")
+            return res.status(400).json("O endereço de email ou a senha que você inseriu não é válido")
         }
 
-        const token = jwt.sign({ id: consumidor.id, email: consumidor.email}, senhaHash, {expiresIn: '24h'});
+        const token = jwt.sign({ id: usuario.id, email: usuario.email}, senhaHash, {expiresIn: '24h'});
 
-        const {senha: _, ...dadosConsumidor } = consumidor;
+        const {senha: _, ...dadosUsuario } = usuario;
 
         return res.status(200).json({
-            consumidor: {
-                id: dadosConsumidor.id,
-                nome: dadosConsumidor.nome,
-                email: dadosConsumidor.email,
-                telefone: dadosConsumidor.telefone
+            usuario: {
+                id: dadosUsuario.id,
+                nome: dadosUsuario.nome,
+                email: dadosUsuario.email,
+                restaurante: restaurante
             }, 
             token
         });

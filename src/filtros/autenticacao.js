@@ -15,16 +15,19 @@ const autenticacao = async (req, res, next) => {
         
         const { id } = jwt.verify(token, senhaHash);
 
-        const consumidor = await knex('consumidor').where({ id }).first();
+        const usuario = await knex('usuario').where({ id }).first();
 
-        if (!consumidor) {
-            return res.status(404).json("Token inválido");
+        if (!usuario) {
+            return res.status(404).json("Token restaurante inválido");
         }
-        
-        const { senha, ...dadosConsumidor } = consumidor;
 
-        req.consumidor = { 
-            dadosConsumidor
+        const restaurante = await knex('restaurante').where('usuario_id', '=', `${id}`).first();
+        
+        const { senha, ...dadosUsuario } = usuario;
+
+        req.usuario = { 
+            dadosUsuario,
+            restaurante
         }
     
         next();
